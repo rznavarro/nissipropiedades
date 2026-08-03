@@ -1615,4 +1615,15 @@ $$$$$$$$$$                    /////////               /////////                 
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMDRV3P6"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+<script>
+  document.addEventListener('keydown', function (e) {
+    var tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'a' || e.key === 'A') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      }
+    }
+  });
+</script>
 </body></html>
