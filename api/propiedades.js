@@ -14,6 +14,9 @@ const CAMPOS = {
   descripcion: 'Descripción Propiedad',
   imagenes: 'Imagenes',
   destacada: 'Destacada',
+  comuna: 'Comuna',
+  tipo: 'Tipo de Propiedad',
+  contrato: 'Tipo de Contrato',
 };
 
 const ETIQUETAS_ESTADO = {
@@ -30,6 +33,23 @@ function esDisponible(estado) {
 
 function normalizarEstado(estado) {
   return typeof estado === 'string' ? estado.trim().toLowerCase() : '';
+}
+
+function textoONulo(valor) {
+  return typeof valor === 'string' && valor.trim() ? valor.trim() : null;
+}
+
+function coincideTexto(valorCampo, valorFiltro) {
+  if (!valorFiltro) return true;
+  return normalizarEstado(valorCampo) === normalizarEstado(valorFiltro);
+}
+
+// '1'..'4' = coincidencia exacta; '5+' = 5 o más. undefined/'' = sin filtro.
+function coincideCantidadMin(valorCampo, valorFiltro) {
+  if (!valorFiltro) return true;
+  if (typeof valorCampo !== 'number') return false;
+  if (valorFiltro === '5+') return valorCampo >= 5;
+  return valorCampo === Number(valorFiltro);
 }
 
 function etiquetaEstado(estado) {
@@ -64,6 +84,9 @@ function normalizarRegistro(record) {
     descripcion: typeof f[CAMPOS.descripcion] === 'string' && f[CAMPOS.descripcion].trim() ? f[CAMPOS.descripcion].trim() : null,
     destacada: f[CAMPOS.destacada] === true,
     imagenes: mapearImagenes(f[CAMPOS.imagenes]),
+    comuna: textoONulo(f[CAMPOS.comuna]),
+    tipo: textoONulo(f[CAMPOS.tipo]),
+    contrato: textoONulo(f[CAMPOS.contrato]),
   };
 }
 
@@ -107,16 +130,28 @@ module.exports = async function handler(req, res) {
 
   const incluirNoDisponibles = req.query.incluirNoDisponibles === '1';
   const soloDestacadas = req.query.destacadas === '1';
+  const { comuna, tipo, contrato, dormitorios, banos } = req.query;
 
   try {
     const registros = await obtenerTodosLosRegistros({ token, baseId, tableName });
     let propiedades = registros.map(normalizarRegistro);
 
+    // La regla de disponibilidad siempre se aplica primero: los filtros de abajo
+    // nunca pueden hacer aparecer una no-disponible sin incluirNoDisponibles=1.
     if (soloDestacadas) {
       propiedades = propiedades.filter((p) => p.destacada && p.estadoNormalizado === 'disponible');
     } else if (!incluirNoDisponibles) {
       propiedades = propiedades.filter((p) => p.estadoNormalizado === 'disponible');
     }
+
+    propiedades = propiedades.filter(
+      (p) =>
+        coincideTexto(p.comuna, comuna) &&
+        coincideTexto(p.tipo, tipo) &&
+        coincideTexto(p.contrato, contrato) &&
+        coincideCantidadMin(p.dormitorios, dormitorios) &&
+        coincideCantidadMin(p.banos, banos)
+    );
 
     res.status(200).send(JSON.stringify({ propiedades, error: false }));
   } catch (err) {
