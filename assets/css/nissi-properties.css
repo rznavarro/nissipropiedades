@@ -1,0 +1,103 @@
+/* Listado de propiedades (Airtable) — usa los tokens de color/duración/easing
+   ya definidos en :root por el sitio (base-0, base-1000, dur-*, ease-*). */
+
+.property-list_toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+}
+
+.property-list_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3.2rem 2.4rem;
+}
+
+@media (max-width: 991px) {
+  .property-list_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .property-list_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.property-list_state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4.8rem 0;
+  opacity: 0.7;
+}
+
+.property-card {
+  position: relative;
+  z-index: 0;
+}
+
+.property-card_shadow {
+  position: absolute;
+  inset: -1.6rem;
+  z-index: -1;
+  border-radius: 1.6rem;
+  opacity: 0;
+  background: var(--_colors---base-1000--100, rgba(0, 0, 0, 0.06));
+  transition: opacity var(--dur-m, 0.8s) var(--ease-out, ease);
+}
+
+.property-card:hover .property-card_shadow {
+  opacity: 1;
+}
+
+.property-card_img {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background: var(--_colors---base-1000--line, #e5e5e5);
+}
+
+.property-card_img .img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-card_badge {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: var(--_colors---base-1000--primary, #111);
+  color: var(--_colors---base-0--primary, #fff);
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.property-card_data-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.property-card_stat {
+  min-width: 6rem;
+}
+
+.property-card_price {
+  opacity: 0.85;
+}
+
+.property-card_desc {
+  margin-top: 1.2rem;
+  opacity: 0.75;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
