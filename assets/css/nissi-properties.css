@@ -6,6 +6,11 @@
    template en vez de tocar su hoja de estilos externa. */
 :root {
   --_global-colors---brand-500--powder-sky: crimson;
+
+  /* El burdeo/ciruela oscuro del tema dark (footer, Destacadas) pasa a un rojo
+     oscuro sin matiz morado — más cercano a la marca real de Nissi (roja,
+     blanca, texto negro) que al "vino" del template original. */
+  --_global-colors---brand-500--velvet-plum: #7a0e1e;
 }
 
 .property-list_toggle {
