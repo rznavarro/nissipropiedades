@@ -178,10 +178,14 @@
   gap: 6.4rem 4.8rem;
 }
 
-/* El Hero de portada usa position:sticky y puede seguir renderizado muy abajo
-   en la página durante su animación de scroll. Se fuerza esta sección a pintar
-   siempre por encima, en su propio contexto de apilamiento. */
-#destacadas {
+/* El Hero y el footer del template usan position:sticky / overlap con margen
+   negativo para su efecto de transición entre secciones, y pueden seguir
+   renderizados detrás de la sección siguiente durante el scroll. Se fuerza
+   cualquier sección con nuestras cards/filtros a pintar siempre por encima,
+   en su propio contexto de apilamiento. */
+#destacadas,
+section:has(.property-grid),
+section:has(.property-filters) {
   position: relative;
   z-index: 2;
   isolation: isolate;
