@@ -94,6 +94,20 @@
   }
 }
 
+/* El sitio usa font-size:1vw en <html>, así que todo lo medido en rem (incluida
+   nuestra propia grilla) crece sin tope en monitores anchos. Ponemos un máximo
+   en px (no en rem) para que las cards dejen de agrandarse pasado cierto punto
+   y queden centradas en vez de estirarse a lo ancho de toda la pantalla. */
+.destacadas-header,
+.property-grid,
+.listing-grid,
+.property-filters,
+.property-pager {
+  max-width: 1360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ---- Sección "Propiedades destacadas" (portada) ---- */
 
 .destacadas-header {
