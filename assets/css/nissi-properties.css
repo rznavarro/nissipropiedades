@@ -178,6 +178,15 @@
   gap: 6.4rem 4.8rem;
 }
 
+/* El Hero de portada usa position:sticky y puede seguir renderizado muy abajo
+   en la página durante su animación de scroll. Se fuerza esta sección a pintar
+   siempre por encima, en su propio contexto de apilamiento. */
+#destacadas {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+
 @media (max-width: 767px) {
   .property-grid {
     grid-template-columns: 1fr;
@@ -243,7 +252,10 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 1.6rem;
-  background: var(--_colors---base-1000--line, #333);
+  /* Color opaco fijo (no la variable del tema, que resulta semitransparente y
+     deja ver lo que sea que el Hero pegajoso siga renderizando muy abajo en
+     la página) para que el placeholder nunca se vea "transparentado". */
+  background-color: #4a0813;
 }
 
 .featured-card_img .img {
