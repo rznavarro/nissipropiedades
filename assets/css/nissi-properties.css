@@ -1,6 +1,13 @@
 /* Listado de propiedades (Airtable) — usa los tokens de color/duración/easing
    ya definidos en :root por el sitio (base-0, base-1000, dur-*, ease-*). */
 
+/* El celeste "powder-sky" del tema claro (Hero, sección de categorías y el fondo
+   claro del listado) pasa a rojo carmesí. Se sobreescribe la variable global del
+   template en vez de tocar su hoja de estilos externa. */
+:root {
+  --_global-colors---brand-500--powder-sky: crimson;
+}
+
 .property-list_toggle {
   display: flex;
   align-items: center;
