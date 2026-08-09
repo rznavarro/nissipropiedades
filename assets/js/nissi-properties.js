@@ -106,54 +106,6 @@
     );
   }
 
-  // Card vertical y compacta (foto arriba, datos abajo) para grillas densas como el
-  // listado completo de /propiedades — a diferencia de renderPropertyCard (horizontal,
-  // pensada para 1-2 destacadas), esta aprovecha mejor el ancho en 3 columnas.
-  function renderListingCard(p, opts) {
-    opts = opts || {};
-    var imagen = pickImagen(p.imagenes);
-    var nombre = tituloPropiedad(p);
-
-    var badge = '';
-    if (opts.mostrarEstado && p.estadoNormalizado !== 'disponible') {
-      badge = '<div class="property-card_badge">' + escapeHtml(p.estadoEtiqueta) + '</div>';
-    }
-
-    var comuna = metaLine(ICO_PIN, [p.comuna]);
-    var superficieDorm = metaLine(ICO_RULER, [
-      p.superficieTotal !== null && p.superficieTotal !== undefined ? p.superficieTotal + ' m²' : null,
-      p.dormitorios !== null && p.dormitorios !== undefined ? p.dormitorios + ' dormitorios' : null,
-      p.banos !== null && p.banos !== undefined ? p.banos + ' baños' : null,
-    ]);
-    var contrato = metaLine(ICO_TAG, [p.contrato]);
-    var estacionamientoBodega = metaLine(ICO_CAR, [
-      p.estacionamientos !== null && p.estacionamientos !== undefined ? p.estacionamientos + ' estacionamientos' : null,
-      p.bodega !== null && p.bodega !== undefined ? p.bodega + ' bodega' : null,
-    ]);
-
-    return (
-      '<div class="listing-card" role="listitem">' +
-      '<div hover-img-card class="listing-card_img img-w">' +
-      '<img hover="img" class="img" src="' + escapeHtml(imagen.src) + '" alt="' + escapeHtml(nombre) + '" loading="lazy" decoding="async"/>' +
-      badge +
-      '</div>' +
-      '<div class="u-16"></div>' +
-      '<div class="listing-card_body">' +
-      '<h3 class="h5 listing-card_title">' + escapeHtml(nombre) + '</h3>' +
-      '<div class="u-8"></div>' +
-      '<div class="p1 listing-card_price">' + escapeHtml(formatPrecio(p.precio)) + '</div>' +
-      '<div class="u-16"></div>' +
-      '<div class="listing-card_meta">' + comuna + superficieDorm + contrato + estacionamientoBodega + '</div>' +
-      '<div class="u-16"></div>' +
-      '<a aria-label="Ver propiedad" hover-btn="" hover-nav-item="" data-wf--btn--variant="sec" href="/propiedades" class="btn w-inline-block">' +
-      '<div class="btn_label"><div class="btn_label_text"><div hover="text" class="l1">Ver Propiedad</div></div><div class="btn_label_text is-2"><div hover="text" class="l1">Ver Propiedad</div></div></div>' +
-      '<div class="btn_bg"><div hover="bg" class="btn_bg_fill"></div></div>' +
-      '</a>' +
-      '</div>' +
-      '</div>'
-    );
-  }
-
   function fetchPropiedades(filtros) {
     filtros = filtros || {};
     var params = new URLSearchParams();
@@ -244,7 +196,7 @@
       var inicio = (paginaActual - 1) * PAGE_SIZE;
       var pagina = propiedadesActuales.slice(inicio, inicio + PAGE_SIZE);
       container.innerHTML = pagina
-        .map(function (p) { return renderListingCard(p, { mostrarEstado: !!filtrosActuales.incluirNoDisponibles }); })
+        .map(function (p) { return renderPropertyCard(p, { mostrarEstado: !!filtrosActuales.incluirNoDisponibles }); })
         .join('');
       renderPager(pagerEl, propiedadesActuales.length, paginaActual, function (nuevaPagina) {
         paginaActual = nuevaPagina;
@@ -296,7 +248,6 @@
   window.NissiProperties = {
     fetchPropiedades: fetchPropiedades,
     renderPropertyCard: renderPropertyCard,
-    renderListingCard: renderListingCard,
     mountListado: mountListado,
     mountDestacadas: mountDestacadas,
     formatPrecio: formatPrecio,

@@ -87,7 +87,6 @@
 @media (min-width: 992px) {
   .destacadas-header,
   .property-grid,
-  .listing-grid,
   .property-filters,
   .property-pager {
     padding-left: 10rem;
@@ -100,7 +99,6 @@
    y queden centradas en vez de estirarse a lo ancho de toda la pantalla. */
 .destacadas-header,
 .property-grid,
-.listing-grid,
 .property-filters,
 .property-pager {
   max-width: 1360px;
@@ -220,54 +218,3 @@
   object-fit: cover;
 }
 
-/* ---- Grid compacto del listado completo (/propiedades) ---- */
-
-.listing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4.8rem 3.2rem;
-}
-
-@media (max-width: 991px) {
-  .listing-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .listing-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.listing-card {
-  min-width: 0;
-}
-
-.listing-card_img {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 1.2rem;
-  background: var(--_colors---base-1000--line, #333);
-}
-
-.listing-card_img .img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.listing-card_title {
-  line-height: 1.2;
-}
-
-.listing-card_price {
-  opacity: 0.6;
-}
-
-.listing-card_meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
