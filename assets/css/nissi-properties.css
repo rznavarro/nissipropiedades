@@ -80,6 +80,20 @@
   border-color: var(--_colors---base-1000--primary, #111);
 }
 
+/* El logo giratorio, la barra de progreso y "desplázate" del template son fixed
+   y ocupan permanentemente ~11.5rem del borde izquierdo en desktop (en toda la
+   página, no solo el Hero). Reservamos ese espacio para que el texto de las
+   cards y los filtros nunca queden debajo. */
+@media (min-width: 992px) {
+  .destacadas-header,
+  .property-grid,
+  .listing-grid,
+  .property-filters,
+  .property-pager {
+    padding-left: 9rem;
+  }
+}
+
 /* ---- Sección "Propiedades destacadas" (portada) ---- */
 
 .destacadas-header {
