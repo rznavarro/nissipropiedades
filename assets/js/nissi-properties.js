@@ -232,16 +232,34 @@
     cargar();
   }
 
-  // Monta la sección "destacadas" de la portada; se oculta si no hay resultados.
-  function mountDestacadas(sectionEl, container) {
+  // Monta la sección "destacadas" de la portada. El encabezado y el buscador
+  // quedan siempre visibles; solo el bloque de resultados (divisor + grid) se
+  // oculta si no hay ninguna propiedad marcada como destacada todavía.
+  function mountDestacadas(sectionEl, container, resultadosEl) {
     if (!sectionEl || !container) return;
     fetchPropiedades({ destacadas: true }).then(function (data) {
       if (data.error || !data.propiedades.length) {
-        sectionEl.style.display = 'none';
+        if (resultadosEl) resultadosEl.style.display = 'none';
         return;
       }
       container.innerHTML = data.propiedades.map(function (p) { return renderPropertyCard(p, {}); }).join('');
-      sectionEl.style.display = '';
+      if (resultadosEl) resultadosEl.style.display = '';
+    });
+  }
+
+  // Buscador (portada u otras páginas): al enviar, arma el query string con los
+  // filtros elegidos y navega a /propiedades ya pre-filtrado.
+  function mountBuscador(form) {
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var filtros = leerFiltrosDeFormulario(form);
+      var params = new URLSearchParams();
+      FILTER_KEYS.forEach(function (k) {
+        if (filtros[k]) params.set(k, filtros[k]);
+      });
+      var qs = params.toString();
+      window.location.href = '/propiedades' + (qs ? '?' + qs : '');
     });
   }
 
@@ -250,6 +268,7 @@
     renderPropertyCard: renderPropertyCard,
     mountListado: mountListado,
     mountDestacadas: mountDestacadas,
+    mountBuscador: mountBuscador,
     formatPrecio: formatPrecio,
   };
 })();
