@@ -199,28 +199,11 @@
     });
   }
 
-  // Buscador compacto del Hero de portada: arma el query string con los filtros
-  // elegidos y navega a /propiedades ya pre-filtrado.
-  function mountHeroSearch(form) {
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var filtros = leerFiltrosDeFormulario(form);
-      var params = new URLSearchParams();
-      FILTER_KEYS.forEach(function (k) {
-        if (filtros[k]) params.set(k, filtros[k]);
-      });
-      var qs = params.toString();
-      window.location.href = '/propiedades' + (qs ? '?' + qs : '');
-    });
-  }
-
   window.NissiProperties = {
     fetchPropiedades: fetchPropiedades,
     renderPropertyCard: renderPropertyCard,
     mountListado: mountListado,
     mountDestacadas: mountDestacadas,
-    mountHeroSearch: mountHeroSearch,
     formatPrecio: formatPrecio,
   };
 })();

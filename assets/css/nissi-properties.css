@@ -55,26 +55,6 @@
   }
 }
 
-.hero-search {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.2rem;
-  max-width: 76rem;
-}
-
-.hero-search_submit {
-  flex: 1 1 auto;
-  white-space: nowrap;
-}
-
-@media (max-width: 767px) {
-  .hero-search .property-filters_select,
-  .hero-search_submit {
-    flex: 1 1 100%;
-  }
-}
-
 /* ---- Sección "Propiedades destacadas" (portada) ---- */
 
 .destacadas-header {
