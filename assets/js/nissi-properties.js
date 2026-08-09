@@ -5,6 +5,7 @@
 
   var PLACEHOLDER_IMG = 'logo-negro.png';
   var FILTER_KEYS = ['comuna', 'tipo', 'contrato', 'dormitorios', 'banos'];
+  var PAGE_SIZE = 16;
 
   function formatPrecio(precio) {
     if (typeof precio !== 'number' || Number.isNaN(precio)) return 'Precio a consultar';
@@ -154,27 +155,72 @@
     return filtros;
   }
 
+  // Pager numerado (1, 2, 3…) de PAGE_SIZE propiedades por página. Se oculta solo
+  // si todo entra en una página.
+  function renderPager(pagerEl, total, paginaActual, onCambiar) {
+    if (!pagerEl) return;
+    var totalPaginas = Math.ceil(total / PAGE_SIZE);
+    if (totalPaginas <= 1) {
+      pagerEl.innerHTML = '';
+      return;
+    }
+    var botones = [];
+    for (var i = 1; i <= totalPaginas; i++) {
+      botones.push(
+        '<button type="button" class="property-pager_btn' +
+        (i === paginaActual ? ' is-active' : '') +
+        '" data-pagina="' + i + '" aria-current="' + (i === paginaActual ? 'page' : 'false') + '">' +
+        i + '</button>'
+      );
+    }
+    pagerEl.innerHTML = botones.join('');
+    Array.prototype.forEach.call(pagerEl.querySelectorAll('[data-pagina]'), function (btn) {
+      btn.addEventListener('click', function () {
+        onCambiar(Number(btn.getAttribute('data-pagina')));
+      });
+    });
+  }
+
   // Monta el listado de /propiedades.html. `filtrosForm` es el <form> que envuelve
   // los <select> de comuna/tipo/contrato/dormitorios/baños y el checkbox de
   // no-disponibles; re-consulta la API en cada cambio, sin recargar la página.
-  function mountListado(container, filtrosForm) {
+  // `pagerEl` (opcional) es el contenedor donde se dibujan los botones de página.
+  function mountListado(container, filtrosForm, pagerEl) {
     if (!container) return;
 
+    var propiedadesActuales = [];
+    var filtrosActuales = {};
+    var paginaActual = 1;
+
+    function renderPagina() {
+      var inicio = (paginaActual - 1) * PAGE_SIZE;
+      var pagina = propiedadesActuales.slice(inicio, inicio + PAGE_SIZE);
+      container.innerHTML = pagina
+        .map(function (p) { return renderPropertyCard(p, { mostrarEstado: !!filtrosActuales.incluirNoDisponibles }); })
+        .join('');
+      renderPager(pagerEl, propiedadesActuales.length, paginaActual, function (nuevaPagina) {
+        paginaActual = nuevaPagina;
+        renderPagina();
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
     function cargar() {
-      var filtros = leerFiltrosDeFormulario(filtrosForm);
+      filtrosActuales = leerFiltrosDeFormulario(filtrosForm);
+      paginaActual = 1;
       renderEstado(container, 'cargando');
-      fetchPropiedades(filtros).then(function (data) {
+      if (pagerEl) pagerEl.innerHTML = '';
+      fetchPropiedades(filtrosActuales).then(function (data) {
         if (data.error) {
           renderEstado(container, 'error');
           return;
         }
         if (!data.propiedades.length) {
-          renderEstado(container, hayFiltrosActivos(filtros) ? 'sinResultadosFiltro' : 'vacio');
+          renderEstado(container, hayFiltrosActivos(filtrosActuales) ? 'sinResultadosFiltro' : 'vacio');
           return;
         }
-        container.innerHTML = data.propiedades
-          .map(function (p) { return renderPropertyCard(p, { mostrarEstado: !!filtros.incluirNoDisponibles }); })
-          .join('');
+        propiedadesActuales = data.propiedades;
+        renderPagina();
       });
     }
 

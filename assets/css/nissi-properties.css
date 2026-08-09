@@ -55,6 +55,31 @@
   }
 }
 
+.property-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.property-pager_btn {
+  min-width: 4rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--_colors---base-1000--line, currentColor);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--dur-s, 0.4s) var(--ease-out, ease), color var(--dur-s, 0.4s) var(--ease-out, ease);
+}
+
+.property-pager_btn.is-active {
+  background: var(--_colors---base-1000--primary, #111);
+  color: var(--_colors---base-0--primary, #fff);
+  border-color: var(--_colors---base-1000--primary, #111);
+}
+
 /* ---- Sección "Propiedades destacadas" (portada) ---- */
 
 .destacadas-header {
