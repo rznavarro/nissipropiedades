@@ -56,9 +56,31 @@
   border-radius: 999px;
   border: 1px solid var(--_colors---base-1000--line, currentColor);
   background: transparent;
-  color: inherit;
   font: inherit;
   cursor: pointer;
+}
+
+/* El <select> nativo no hereda el color de texto del tema (el reset base del
+   sitio le deja un gris oscuro pensado para fondos claros), así que se fija
+   explícito según el tema oscuro/claro donde viva el buscador. */
+.theme_on-dark .property-filters_select {
+  color: var(--_colors---base-0--primary, #fff);
+}
+
+.theme_on-brand .property-filters_select,
+.theme_on-light .property-filters_select {
+  color: var(--_colors---base-1000--primary, #111);
+}
+
+.property-filters_select option {
+  color: #111;
+}
+
+/* El botón "Buscar propiedades"/"Ver Propiedad" usa --btn-text-c para el color
+   de su texto; se fija en oscuro para que se lea sobre el relleno claro por
+   defecto del botón (el hover ya lo invierte a claro por su cuenta). */
+.property-filters [hover-btn] {
+  --btn-text-c: var(--_colors---base-1000--primary, #111);
 }
 
 @media (max-width: 640px) {
